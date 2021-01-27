@@ -1,0 +1,44 @@
+/* Color theme */
+/* Dark Grey: #43464B
+Mid Gray: #87898c
+light gray: #b2b4b5 */
+
+body {
+    background-color: #c1c3c4;
+    color: #43464B;
+}
+
+#side-nav {
+    background-color: #b2b4b5;
+    width: 20%;
+    height: 100%;
+    margin-left: -40px;
+    margin-top: 7px;
+    padding-bottom: 100%;
+    padding-top: 20px;
+    border-top: 3px solid black;
+    border-right: 3px solid black;
+}
+
+#title {
+    background-color: #b2b4b5;
+    border-radius: 0 0 12px 0;
+    margin: -10px;
+    padding: 20px;
+    border-bottom: 3px solid black;
+}
+
+#side-nav li{
+    padding: 20px;
+    color: green;
+}
+
+#form {
+    margin-top: 10px;
+    border-bottom: 5px solid black;
+}
+
+#menu-items {
+    display: flex;
+    flex-direction: row;
+}
