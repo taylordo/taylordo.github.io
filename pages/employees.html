@@ -25,15 +25,16 @@
         <div id="form">
         <form>
             <fieldset>
-                <h2>New Bugs</h2>
-                <label for="description">Description of issue</label>
-                <input type="text" name="description">
-                <label for="urgency">Urgency Level 1-3</label>
-                <input type="number" name="urgency">
-                <input type="number" name="completion" value="0" hidden>
-                <label for="employee">Employee assigned?</label> 
-                <input type="text" name="employee">
-                <input type="submit" name="submit" value="submit-new-bug">
+                <h2>New Employee</h2>
+                <label for="first_name">First Name</label>
+                <input type="text" name="first_name">
+                <label for="last_name">Last Name</label>
+                <input type="text" name="last_name">
+                <label for="email">Email</label>
+                <input type="email" name="email">
+                <label for="hire-date">
+                <input type="date" name="hire-date">
+                <input type="submit" name="submit" value="submit-new-employee">
             </fieldset>
         </form>
         </div>
@@ -41,26 +42,30 @@
         <div id="featured-bugs">
         <form>
             <fieldset>
-                <h3>Bug 001</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste, sed accusantium. Porro, vero aliquam consectetur reiciendis, quas, ab architecto tempore tempora voluptates illo reprehenderit in vel temporibus sequi facilis inventore?</p>
-                <label for="urgency">Urgency Level</label>
-                <input type="number" name="urgency" value="3" disabled>
-                <label for="employee">Employee assigned?</label> 
-                <input type="text" name="employee" value="Frank" disabled>
-                <input type="submit" name="delete" value="delete">
-                <input type="submit" name="bug-resolved" value="Resolved">
+                <label for="first_name">First Name</label>
+                <input type="text" name="first_name" value="Frank" disabled>
+                <label for="last_name">Last Name</label>
+                <input type="text" name="last_name" value="Thomas" disabled>
+                <label for="email">Email</label>
+                <input type="email" name="email" value="fthomas@email.com" disabled>
+                <label for="hire-date">
+                <input type="date" name="hire-date" value="2016-2-2" disabled>
+                <button name="edit">Edit</button>
+                <button name="delete">Delete</button>    
             </fieldset>
         </form>
         <form>
             <fieldset>
-                <h3>Bug 002</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste, sed accusantium. Porro, vero aliquam consectetur reiciendis, quas, ab architecto tempore tempora voluptates illo reprehenderit in vel temporibus sequi facilis inventore?</p>
-                <label for="urgency">Urgency Level</label>
-                <input type="number" name="urgency" value="1" disabled>
-                <label for="employee">Employee assigned?</label> 
-                <input type="text" name="employee" value="Eric" disabled>
-                <input type="submit" name="delete" value="delete">
-                <input type="submit" name="bug-resolved" value="Resolved">
+                <label for="first_name">First Name</label>
+                <input type="text" name="first_name" value="Eric" disabled>
+                <label for="last_name">Last Name</label>
+                <input type="text" name="last_name" value="Johnson" disabled>
+                <label for="email">Email</label>
+                <input type="email" name="email" value="ejohnson@email.com" disabled>
+                <label for="hire-date">
+                <input type="date" name="hire-date" value="2014-2-2" disabled>
+                <button name="edit">Edit</button>
+                <button name="delete">Delete</button>    
             </fieldset>
         </form>
         </div>
