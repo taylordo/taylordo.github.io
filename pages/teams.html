@@ -8,7 +8,7 @@
 </head>
 <body>
     <!-- Title -->
-    <h1 id="title"> BUGSPL<span style="color:green">A</span>T by Taylor and Peterman Industries</h1>
+    <h1 id="title"> BUGSPL<span style="color:green">A</span>T by Taylor Peterman Industries</h1>
 
 
     <!-- Side Navigation -->
@@ -16,63 +16,76 @@
     <ul id="side-nav">
         <li><a href="employees.html">Employees</a></li>
         <li><a href="teams.html">Teams</a></li>
-        <li><a href="projects.html">Projects</a></li>
-        <li><a href="../index.html">Bugs</a></li>
+        <li><a href="features.html">Features</a></li>
+        <li><a href="bugs.html">Bugs</a></li>
     </ul>
 
-    <!-- Bug Submission -->
-        <div id="form-bug-container">
+    <!-- Team Submission -->
+        <div id="form-team-container">
         <div id="form">
         <form>
             <fieldset>
-                <h2>New Team</h2>
+                <h2>Add New Team</h2>
+                <label for="feature">Feature</label>
+                <input type="text" name="feature">
                 <label for="team-name">Team Name</label>
-                <input type="text" name="Team Name">
+                <input type="text" name="team-name"><br>
                 <label for="meeting">Daily Meeting Time</label>
                 <input type="text" name="meeting">
                 <label for="location">Meeting Location</label>
                 <input type="text" name="location">
                 <label for="lead">Team Lead</label> 
                 <input type="text" name="lead">
-                <input type="submit" name="submit" value="Submit">
+                <input type="submit" name="submit" value="Submit New Team">
             </fieldset>
         </form>
         </div>
         
-        <div id="featured-bugs">
+    <!-- Team List -->
+        <div id="featured-teams">
+        <h2>&nbsp;&nbsp;&nbsp;Current Teams:</h2>
         <form>
             <fieldset>
-                <h3>Team 001</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste, sed accusantium. Porro, vero aliquam consectetur reiciendis, quas, ab architecto tempore tempora voluptates illo reprehenderit in vel temporibus sequi facilis inventore?</p>
+                <h3>Team 001:</h3>
+                <label for="team-name">Team Name</label>
+                <input type="text" name="team-name" value="Team 001" disabled>               
                 <label for="meeting">Daily Meeting Time</label>
-                <input type="text" name="meeting" disabled>
+                <input type="text" name="meeting" value="11:30am" disabled>
                 <label for="location">Meeting Location</label>
-                <input type="text" name="location" disabled>
-                <label for="lead">Frank the manager</label> 
-                <input type="text" name="lead" disabled>
+                <input type="text" name="location" value="Conference Room" disabled>
+                <label for="lead">Team Leader</label> 
+                <input type="text" name="lead" value="Frank" disabled>
+                <input type="submit" name="Edit" value="Edit">
+                <h3>Team Members:</h3>
                 <ul>
-                    <li><input type="text" name="team001employee01" value="Frank From IT" disabled></li>
-                    <li><input type="text" name="team002employee02" value="Dave" disabled></li>
-                    <li><input type="text" name="addMember"><button type="submit" value="Add New Member"></li>
+                    <li><input type="text" name="team001employee01" value="Frank From IT" disabled><input type="submit" value="Delete Member"></li>
+                    <li><input type="text" name="team002employee02" value="Dave" disabled><input type="submit" value="Delete Member"></li>
+                    <li><input type="text" name="addMember"><input type="submit" value="Add New Member"></li>
                 </ul>
+                <input type="submit" name="delete" value="Delete Team">
             </fieldset>
         </form>
         <form>
             <fieldset>
-                <h3>Team 002</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste, sed accusantium. Porro, vero aliquam consectetur reiciendis, quas, ab architecto tempore tempora voluptates illo reprehenderit in vel temporibus sequi facilis inventore?</p>
+                <h3>Team 002:</h3>
+                <label for="team-name">Team Name</label>
+                <input type="text" name="team-name" value="Team 002" disabled>  
                 <label for="meeting">Daily Meeting Time</label>
-                <input type="text" name="meeting" disabled>
+                <input type="text" name="meeting" value="2:00pm" disabled>
                 <label for="location">Meeting Location</label>
-                <input type="text" name="location" disabled>
-                <label for="lead">Bill the manager</label> 
-                <input type="text" name="lead" disabled>
+                <input type="text" name="location" value="https://us02web.zoom.us/j/85947692059?pwd=eExQNGZzc3JnSVByMkxsNGp6O" disabled>
+                <label for="lead">Team Leader</label> 
+                <input type="text" name="lead" value="Bill" disabled>
+                <input type="submit" name="Edit" value="Edit">
+                <h3>Team Members:</h3>
                 <ul>
-                    <li><input type="text" name="team001employee01" value="Terry From IT" disabled></li>
-                    <li><input type="text" name="team002employee02" value="Gordon" disabled></li>
-                    <li><input type="text" name="addMember"><button type="submit" value="Add New Member"></li>
+                    <li><input type="text" name="team001employee01" value="Terry From IT" disabled><input type="submit" value="Delete Member"></li>
+                    <li><input type="text" name="team002employee02" value="Gordon" disabled><input type="submit" value="Delete Member"></li>
+                    <li><input type="text" name="addMember"><input type="submit" value="Add New Member"></li>
                 </ul>
+                <input type="submit" name="delete" value="Delete Team">
             </fieldset>
+
         </form>
         </div>
         </div>
