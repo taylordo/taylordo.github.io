@@ -8,7 +8,9 @@
 </head>
 <body>
     <!-- Title -->
-    <h1 id="title"> BUGSPL<span style="color:green">A</span>T by Taylor Peterman Industries</h1>
+    <a id="title-link" href="../index.html">        
+        <h1 id="title"> BUGSPL<span style="color:green">A</span>T by Taylor Peterman Industries</h1>
+    </a>
 
 
     <!-- Side Navigation -->
@@ -21,7 +23,7 @@
     </ul>
 
     <!-- Feature Submission -->
-        <div id="form-bug-container">
+        <div id="form-feature-container">
         <div id="form">
         <form>
             <fieldset>
@@ -31,8 +33,8 @@
                 <label for="urgency">Deadline</label>
                 <input type="date" name="urgency">
                 <input type="number" name="status" value="0" hidden>
-                <label for="team">Team Assigned</label> 
-                <input type="text" name="team">
+                <label for="team">Team Assigned </label> 
+                <input type="text" placeholder="(team ID)" name="team">
                 <input type="submit" name="submit" value="Submit New Feature">
             </fieldset>
         </form>
@@ -50,9 +52,9 @@
                 <label for="deadline">Deadline</label>
                 <input type="date" name="deadline" value="2018-12-11" disabled>
                 <label for="status">Status</label>
-                <input type="number" name="status" value="0">
+                <input type="number" name="status" value="0" disabled>
                 <label for="team">Team Assigned</label> 
-                <input type="text" name="team" value="Team 002">
+                <input type="text" name="team" value="Zoom Team" disabled>
                 <button type="submit" name="edit">Edit</button>
                 <button type="submit" name="delete">Delete</button>
             </fieldset>
@@ -66,9 +68,9 @@
                 <label for="deadline">Deadline</label>
                 <input type="date" name="deadline" value="2018-11-12" disabled>
                 <label for="status">Status</label>
-                <input type="number" name="status" value="0">
+                <input type="number" name="status" value="0" disabled>
                 <label for="team">Team Assigned</label> 
-                <input type="text" name="team" value="Team 001">
+                <input type="text" name="team" value="Frank's Team" disabled>
                 <button type="submit" name="edit">Edit</button>
                 <button type="submit" name="delete">Delete</button>
             </fieldset>
