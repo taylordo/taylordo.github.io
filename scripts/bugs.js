@@ -16,7 +16,7 @@ bugSubData["employee"] = employee;
 return bugSubData
 }
 
-/* Generate Table */
+/* Generate Table of pre-existing bugs onto  */
 
 let attachBugCard = function (dataSet) {
     const rootParent = document.getElementById('featured-bugs');
@@ -28,15 +28,17 @@ let attachBugCard = function (dataSet) {
 let generateBugCard = function (dataSet) {
     const form = document.createElement('form');
     const fieldset = document.createElement('fieldset');
+    const br = document.createElement('br');
+    const br1 = document.createElement('br')
     /* Add content to card */
     fieldset.appendChild(generateHeader(dataSet));
     fieldset.appendChild(generateTextArea(dataSet));
+    fieldset.appendChild(br);
     fieldset.appendChild(generateUrgency(dataSet));
     fieldset.appendChild(generateName(dataSet));
+    fieldset.appendChild(br1)
     fieldset.appendChild(generateUpdate(dataSet));
     fieldset.appendChild(generateDelete(dataSet));
-    const br = document.createElement('br');
-    fieldset.appendChild(br);
     fieldset.appendChild(generateResolved(dataSet));
 
     /* Complete append of items to document. */
@@ -65,7 +67,13 @@ let generateTextArea = function (dataSet) {
 
 let generateHeader = function (dataSet) {
     const header = document.createElement('h3');
-    header.textContent = "Bug" + " " + dataSet.id;
+    header.setAttribute('resolved', dataSet.resolved);
+    let resolveStatus = ''
+    if (dataSet.resolved === true) {
+        resolveStatus = 'Resolved'
+        header.style.textDecoration = "line-through";
+    }
+    header.textContent = "Bug" + " " + dataSet.id + " " + resolveStatus;
     return header;
 }
 
@@ -82,12 +90,12 @@ let generateUrgency = function (dataSet) {
 
 let generateName = function (dataSet) {
     const input = document.createElement('input');
-    const employeeNum = `employee${dataSet.employee}`
+    const employeeNum = `employee${dataSet.id}`
     input.setAttribute('type', 'text');
     input.setAttribute('id', employeeNum);
     input.setAttribute('value', dataSet.employee);
     input.disabled = true;
-    const label = generateLabel(`employee${employeeNum}`, ' Employee Assigned: ');
+    const label = generateLabel(employeeNum, ' Employee Assigned: ');
     label.appendChild(input);
     return label;
 }
@@ -117,15 +125,23 @@ let generateResolved = function (dataSet) {
 }
 
 /* TEST Table Data */
-const testData = [{'id': '002', 
-            'description': 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste, sed accusantium. Porro, vero aliquam consectetur reiciendis, quas, ab architecto tempore tempora voluptates illo reprehenderit in vel temporibus sequi facilis inventore?',
-            'urgency': '2',
-            'employee': 'Bill Braskerman',
-            },
-            {'id': '003',
-            'description': 'Backend Will not connect to MariaDB due to CORS error, I am currently too dumb to figure it out.',
-            'urgency': '3',
-            'employee': 'Don'}]
+const testData = [{'id': '001', 
+                   'description': 'This is the first item in the lise',
+                   'urgency': '1',
+                   'employee': 'Phil Mckracken',
+                   'resolved': false
+                   },
+                   {'id': '002', 
+                    'description': 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste, sed accusantium. Porro, vero aliquam consectetur reiciendis, quas, ab architecto tempore tempora voluptates illo reprehenderit in vel temporibus sequi facilis inventore?',
+                    'urgency': '2',
+                    'employee': 'Bill Braskerman',
+                    'resolved': true
+                   },
+                   {'id': '003',
+                    'description': 'Backend Will not connect to MariaDB due to CORS error, I am currently too dumb to figure it out.',
+                    'urgency': '3',
+                    'employee': 'Don',
+                    'resolved': false}]
 
 document.addEventListener('DOMContentLoaded', attachBugCard(testData));
 

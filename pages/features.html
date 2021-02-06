@@ -28,14 +28,14 @@
         <form>
             <fieldset>
                 <h2>Add New Feature</h2>
-                <label for="description">Description</label>
-                <input type="text" name="description">
-                <label for="urgency">Deadline</label>
-                <input type="date" name="urgency">
-                <input type="number" name="status" value="0" hidden>
+                <label for="newdescription">Description</label>
+                <input type="text" id="newdescription">
+                <label for="newdate">Deadline</label>
+                <input type="date" id="newdate">
+                <input type="number" id="newstatus" value="0" hidden>
                 <label for="team">Team Assigned </label> 
-                <input type="text" placeholder="(team ID)" name="team">
-                <input type="submit" name="submit" value="Submit New Feature">
+                <input type="text" placeholder="(team ID)" id="newteam">
+                <input type="submit" id="newsubmit" value="Submit New Feature">
             </fieldset>
         </form>
         </div>
@@ -59,25 +59,9 @@
                 <button type="submit" name="delete">Delete</button>
             </fieldset>
         </form>
-        <form>
-            <fieldset>
-                <h2>Feature 002</h2>
-                <textarea id="description" name="description" rows="4" cols="150" disabled>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste, sed accusantium. Porro, vero aliquam consectetur reiciendis, quas, ab architecto tempore tempora voluptates illo reprehenderit in vel temporibus sequi facilis inventore?
-                </textarea>
-                <br>
-                <label for="deadline">Deadline</label>
-                <input type="date" name="deadline" value="2018-11-12" disabled>
-                <label for="status">Status</label>
-                <input type="number" name="status" value="0" disabled>
-                <label for="team">Team Assigned</label> 
-                <input type="text" name="team" value="Frank's Team" disabled>
-                <button type="submit" name="edit">Edit</button>
-                <button type="submit" name="delete">Delete</button>
-            </fieldset>
-        </form>
         </div>
         </div>
     </div>
-
+<script src="../scripts/features.js"></script>
 </body>
 </html>
