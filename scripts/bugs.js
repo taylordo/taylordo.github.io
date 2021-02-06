@@ -13,6 +13,8 @@ bugSubData["urgency"] = urgency;
 bugSubData["completion"] = completion;
 bugSubData["employee"] = employee;
 
+console.log(bugSubData);
+
 return bugSubData
 }
 

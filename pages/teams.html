@@ -28,17 +28,17 @@
         <form>
             <fieldset>
                 <h2>Add New Team</h2>
-                <label for="team-name">Team Name:</label>
-                <input type="text" name="team-name"><br>
-                <label for="lead">Team Lead:</label> 
-                <input type="text" placeholder="(employee ID)" name="lead"><br>
-                <label for="meeting">Daily Meeting Time:</label>
-                <input type="text" name="meeting"><br>
-                <label for="location">Meeting Location:</label>
-                <input type="text" name="location"><br>
-                <label for="feature">Feature:</label>
-                <input type="text" placeholder="(feature ID)"name="feature"><br>
-                <input type="submit" name="submit" value="Submit New Team">
+                <label for="newname">Team Name:</label>
+                <input type="text" id="newname"><br>
+                <label for="newlead">Team Lead:</label> 
+                <input type="number" placeholder="(employee ID)" id="newlead"><br>
+                <label for="newmeeting">Daily Meeting Time:</label>
+                <input type="text" id="newmeeting"><br>
+                <label for="newlocation">Meeting Location:</label>
+                <input type="text" id="newlocation"><br>
+                <label for="newfeature">Feature:</label>
+                <input type="text" placeholder="(feature ID)" id="newfeature"><br>
+                <input type="submit" id="newsubmit" value="Submit New Team">
             </fieldset>
         </form>
         </div>
@@ -87,8 +87,9 @@
                 </ul>
                 <input type="submit" name="delete" value="Delete Team">
             </fieldset>
-
         </form>
+
+        <script src="../scripts/teams.js"></script>
         </div>
         </div>
     </div>
