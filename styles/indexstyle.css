@@ -12,6 +12,12 @@ body {
     color: #43464B;
 }
 
+textarea {
+    margin: 0px;
+    width: 664px;
+    height: 70px;
+}
+
 #side-nav {
     background-color: #f0f3f5;
     width: 20%;

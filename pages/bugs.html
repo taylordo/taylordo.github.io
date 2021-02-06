@@ -28,14 +28,14 @@
         <form id="bug-form">
             <fieldset>
                 <h2>Add New Bug</h2>
-                <label for="description">Description of issue</label>
-                <input type="text" id="description">
-                <label for="urgency">Urgency Level 1-3</label>
-                <input type="number" id="urgency">
-                <input type="number" id="completion" value="0" hidden>
-                <label for="employee">Employee assigned?</label> 
-                <input type="text" placeholder = "(employee ID)" id="employee">
-                <input type="submit" id="submit" value="Submit Bugs">
+                <label for="newdescription">Description of issue</label>
+                <input type="text" id="newdescription">
+                <label for="newurgency">Urgency Level 1-3</label>
+                <input type="number" id="newurgency">
+                <input type="number" id="newcompletion" value="0" hidden>
+                <label for="newemployee">Employee assigned?</label> 
+                <input type="text" placeholder ="(employee ID)" id="newemployee">
+                <input type="submit" id="newsubmit" value="Submit Bugs">
             </fieldset>
         </form>
         </div>
@@ -61,10 +61,8 @@
     <!-- Bug List-->
         <div id="featured-bugs">
         <form>
-            <fieldset>
+            <!-- <fieldset>
                 <h3>Bug 001</h3>
-
-
                 <textarea id="description001" name="description001" rows="4" cols="150" disabled>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste, sed accusantium. Porro, vero aliquam consectetur reiciendis, quas, ab architecto tempore tempora voluptates illo reprehenderit in vel temporibus sequi facilis inventore?
                 </textarea>
                 <br>
@@ -75,23 +73,9 @@
                 <input type="submit" name="delete" value="Edit"><br>
                 <input type="submit" name="delete" value="Delete">
                 <input type="submit" name="bug-resolved" value="Resolved">
-            </fieldset>
+            </fieldset> -->
         </form>
-        <form>
-            <fieldset>
-                <h3>Bug 002</h3>
-                <textarea id="description002" name="description002" rows="4" cols="150" disabled>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste, sed accusantium. Porro, vero aliquam consectetur reiciendis, quas, ab architecto tempore tempora voluptates illo reprehenderit in vel temporibus sequi facilis inventore?
-                </textarea>
-                <br>
-                <label for="urgency">Urgency Level</label>
-                <input type="number" name="urgency" value="1" disabled>
-                <label for="employee">Employee assigned?</label> 
-                <input type="text" name="employee" value="Eric" disabled>
-                <input type="submit" name="edit" value="Edit"><br>
-                <input type="submit" name="delete" value="Delete">
-                <input type="submit" name="bug-resolved" value="Resolved">
-            </fieldset>
-        </form>
+
         </div>
         </div>
     </div>
