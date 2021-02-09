@@ -12,7 +12,7 @@ CREATE TABLE `Teams` (
 `daily_meeting_time` varchar(255) NOT NULL,
 `meeting_location` varchar(255) NOT NULL,
 `team_leader` int(11) DEFAULT NULL,
-`feature` int(11),
+`feature` int(11) DEFAULT NULL,
 PRIMARY KEY (`team_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -30,7 +30,7 @@ CREATE TABLE `Features` (
 `description` varchar(255) DEFAULT NULL,
 `deadline` DATE DEFAULT NULL,
 `status` int(11) NOT NULL,
-`team` int(11),
+`team` int(11) DEFAULT NULL,
 PRIMARY KEY (`feature_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
