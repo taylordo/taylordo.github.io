@@ -145,6 +145,23 @@ const testData = [{'id': '001',
                     'employee': 'Don',
                     'resolved': false}]
 
+let baseUrl = "http://flip2.engr.oregonstate.edu:4756/"
+
+const loadContent = function(event){
+    var req = new XMLHttpRequest();
+    req.open('GET', baseUrl, false);
+    req.send(null);
+    if (req.status >=200 && req.status < 400) {
+    var response = JSON.parse(req.responseText);
+    } else {
+        console.log(req.statusText);
+    }
+    console.log(response);
+    // makeTable(response);
+    // event.preventDefault();
+};
+
 document.addEventListener('DOMContentLoaded', attachBugCard(testData));
+document.addEventListener('DOMContentLoaded', loadContent);
 
 document.getElementById('newsubmit').addEventListener('click', getBugData);
