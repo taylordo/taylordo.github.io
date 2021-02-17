@@ -23,27 +23,35 @@
     </ul>
 
     <!-- Employee Submission -->
-        <div id="form-bug-container">
+        <div id="form-employee-container">
         <div id="form">
         <form>
             <fieldset>
                 <h2>Add New Employee</h2>
                 <label for="first_name">First Name</label>
-                <input type="text" name="first_name">
+                <input type="text" name="first_name" id="first-name-input">
                 <label for="last_name">Last Name</label>
-                <input type="text" name="last_name">
+                <input type="text" name="last_name" id="last-name-input">
                 <label for="email">Email</label>
-                <input type="email" name="email">
+                <input type="email" name="email" id="email-input">
                 <label for="hire-date">
-                <input type="date" name="hire-date">
-                <input type="submit" name="submit" value="Submit New Employee">
+                <input type="date" name="hire-date" id="date-input">
+                <input type="submit" name="submit" id="new-employee-submit-button" value="Submit New Employee">
             </fieldset>
         </form>
         </div>
         
-    <!--Employee List-->
+    <!--Employee List -->
+
         <div id="featured-employees">
         <h2>&nbsp;&nbsp;&nbsp;Current Employees:</h2>
+
+
+
+        <!---
+
+            THIS IS NOW GENERATED IN employees.js
+            
         <form>
             <fieldset>
                 <span class="employee-id">001</span>
@@ -54,7 +62,7 @@
                 <label for="email">Email</label>
                 <input type="email" name="email" value="fthomas@email.com" disabled>
                 <label for="hire-date">
-                <input type="date" name="hire-date" value="2016-2-2" disabled>
+                <input type="date" name="hire-date" value="2016-02-02" disabled>
                 <button name="edit">Edit</button>
                 <button name="delete">Delete</button>    
             </fieldset>
@@ -69,14 +77,15 @@
                 <label for="email">Email</label>
                 <input type="email" name="email" value="ejohnson@email.com" disabled>
                 <label for="hire-date">
-                <input type="date" name="hire-date" value="2014-2-2" disabled>
+                <input type="date" name="hire-date" value="2014-02-02" disabled>
                 <button name="edit">Edit</button>
                 <button name="delete">Delete</button>    
             </fieldset>
-        </form>
+        </form> -->
         </div>
         </div>
     </div>
 
+    <script src="../scripts/employees.js"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 var express = require('express');
-var mysql = require('./dbcon.js');
+var mysql = require('./dbcon.js.js');
 var CORS = require('cors')
 
 var app = express();
