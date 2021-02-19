@@ -12,12 +12,20 @@ let getNewEmployeeData = function() {
     new_employee_data["email_input"] = email_input;
     new_employee_data["date_input"] = date_input;
     
-    console.log(new_employee_data);
-
     return new_employee_data;
 }
 
-let attachEmployeeCards = function (dataSet) {
+function deleteTable(){
+    //deletes the table
+    const rootParent = document.getElementById('featured-employees');
+    
+    while(rootParent.firstElementChild != null){
+        rootParent.removeChild(rootParent.firstElementChild)
+    }
+
+}
+
+let displayTable = function (dataSet) {
     const rootParent = document.getElementById('featured-employees');
     for (let i = 0; i < dataSet.length; i++) {
         rootParent.appendChild(generateEmployeeCard(dataSet[i]));
@@ -51,7 +59,7 @@ let generateLabel = function (name, content) {
 
 let generateID = function (dataSet) {
     const id = document.createElement('span');
-    id.textContent = dataSet['id'];
+    id.textContent = dataSet['employee_id'] + ':';
     id.className = 'employee-id'
     return id;
 }
@@ -83,18 +91,34 @@ let generateEmail = function (dataSet) {
     const input = document.createElement('input');
     input.setAttribute('type', 'email');
     input.setAttribute('id', `email${dataSet.id}`);
-    input.setAttribute('value', dataSet.email)
+    input.setAttribute('value', dataSet.email_address)
     input.disabled = true;
     const label = generateLabel(`email${dataSet.id}`, ' Email: ');
     label.appendChild(input);
     return label;
 }
 
+let truncateDate = function(longDate){
+    //takes the longDate from sql as a parameter and cuts the time off the end
+    date = ""
+    for (j=0; j<longDate.length; j++){
+        if (longDate[j] == 'T'){
+            break;
+        }
+        else{
+            date += longDate[j]
+        }
+    }
+    return date;
+}
+
+
+
 let generateDate = function (dataSet) {
     const input = document.createElement('input');
     input.setAttribute('type', 'date');
     input.setAttribute('id', `date${dataSet.id}`);
-    input.setAttribute('value', dataSet.date)
+    input.setAttribute('value', truncateDate(dataSet.date_of_hire))
     input.disabled = true;
     const label = generateLabel(`date${dataSet.id}`, ' Date of Hire: ');
     label.appendChild(input);
@@ -136,7 +160,50 @@ const testData = [{'id': '001',
                 'email': 'taylordo@oregonstate.edu',
                 'date': '2021-02-16'}]
 
+let baseUrl = "http://flip1.engr.oregonstate.edu:4756/"
 
-document.addEventListener('DOMContentLoaded', attachEmployeeCards(testData));
-document.getElementById('new-employee-submit-button').addEventListener('click', getNewEmployeeData);
+//Initial Display
+document.addEventListener('DOMContentLoaded', function(event) {
+    var req = new XMLHttpRequest();
+    req.open('GET', baseUrl, true);
+    req.send(null);
+    
+    req.addEventListener('load', function(){
+        if (req.status >=200 && req.status < 400) {
+            var response = JSON.parse(req.responseText);
+        
+        } else {
+            console.log(req.statusText);
+        }
+
+        displayTable(response['rows'])
+        event.preventDefault();
+    })
+
+});
+
+//Event listener for new employee button
+document.getElementById('new-employee-submit-button').addEventListener('click', function(event){
+    var req = new XMLHttpRequest();
+    req.open("POST", baseUrl, true);
+    req.setRequestHeader('Content-Type', 'application/json');
+    
+    req.addEventListener('load',function(){
+        if(req.status >=200 && req.status < 400){
+            var response = JSON.parse(req.responseText)
+            
+            deleteTable()
+            displayTable(response['rows'])
+        }
+        else{
+            console.log(req.statusText)
+        }
+    });
+    
+    new_employee_data = getNewEmployeeData()
+    req.send(JSON.stringify(new_employee_data));
+    document.getElementById("new-employee-form").reset();
+    event.preventDefault();
+
+  })
 

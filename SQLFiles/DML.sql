@@ -14,7 +14,7 @@ DELETE FROM Employee WHERE employee_id = :employee_id_from_the_employee_list
 SELECT * FROM Teams
 
 --Add new Team
-INSERT INTO Teams (team_name, daily_meeting_time, meeting_location, team_leader) VALUES (:team_name_input, :daily_meeting_time_input, :meeting_location_input, :team_leader_input)
+INSERT INTO Teams (team_name, daily_meeting_time, meeting_location, team_leader, feature) VALUES (:team_name_input, :daily_meeting_time_input, :meeting_location_input, :team_leader_input, :feature_input)
 
 --Update Team
 UPDATE Teams SET team_name = :team_name_input, daily_meeting_time= :daily_meeting_time_input, meeting_location = :meeting_location_input, team_leader= :team_leader_input WHERE team_id= :team_id_from_the_team_list
