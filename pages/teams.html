@@ -25,20 +25,22 @@
     <!-- Team Submission -->
         <div id="form-team-container">
         <div id="form">
-        <form>
-            <fieldset>
+        <form id = 'new-team-form'>
+            <fieldset id='new-team-fieldset'>
                 <h2>Add New Team</h2>
                 <label for="newname">Team Name:</label>
                 <input type="text" id="team-name-input"><br>
-                <label for="newlead">Team Lead:</label> 
-                <input type="number" placeholder="(employee ID)" id="team-leader-input"><br>
+                <!-- <label for="newlead">Team Lead:</label> 
+                <input type="number" placeholder="(employee ID)" id="team-leader-input"><br> -->
                 <label for="newmeeting">Daily Meeting Time:</label>
                 <input type="text" id="daily-meeting-time-input"><br>
                 <label for="newlocation">Meeting Location:</label>
                 <input type="text" id="meeting-location-input"><br>
+                <!--
                 <label for="newfeature">Feature:</label>
                 <input type="text" placeholder="(feature ID)" id="feature-input"><br>
-                <input type="submit" id="newsubmit" value="Submit New Team">
+                -->
+                <input type="submit" id="new-team-submit-button" value="Submit New Team">
             </fieldset>
         </form>
         </div>
@@ -46,6 +48,13 @@
     <!-- Team List -->
         <div id="featured-teams">
         <h2>&nbsp;&nbsp;&nbsp;Current Teams:</h2>
+
+        <!---
+
+            THIS IS ALL NOW GENERATED IN TEAMS.JS
+
+
+
         <form>
             <fieldset>
                 <h3>Team 001:</h3>
@@ -88,6 +97,7 @@
                 <input type="submit" name="delete" value="Delete Team">
             </fieldset>
         </form>
+        -->
 
         <script src="../scripts/teams.js"></script>
         </div>

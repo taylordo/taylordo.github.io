@@ -14,6 +14,7 @@ const insertQuery = "INSERT INTO Employees (`first_name`, `last_name`, `email_ad
 
 
 
+
 const getAllData = (res) => {
   mysql.pool.query(getAllQuery, (err, rows, fields) => {
     if(err){
@@ -40,13 +41,8 @@ app.get('/',function(req,res,next){
 
 //Insert New Employee
 app.post('/',function(req,res,next){
-
-    console.log(req.body)
-
-    //var context = {};
     
     var {first_name_input, last_name_input, email_input, date_input} = req.body;
-    console.log(first_name_input)
     mysql.pool.query(insertQuery, [first_name_input, last_name_input, email_input, date_input], function(err, result){
       if(err){
         next(err);
