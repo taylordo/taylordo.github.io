@@ -270,24 +270,10 @@ const employee_test_data = [[1,'Don'], [2,'Chris'], [3,'Frank'],
 
 
 
-/* Add Event Listeners for Add Team Member Buttons*/
-let bindAddMemberButtons = function(dataSet){
-    for(i = 0; i < dataSet.length; i++){
-        team_id = dataSet[i]['team_id'];
-
-        button = document.getElementById(`add-member-to-team${team_id}`);
-        button.addEventListener('click', function(team_id){
-            employee_id = document.getElementById(`new-member-input-for-team${team_id}`).value;
-            console.log('Add Employee ', employee_id, 'to team ', team_id);
-        }.bind(button, team_id));
-    }
-}
-
 let baseUrl = "http://flip1.engr.oregonstate.edu:4756/"
 
-//document.addEventListener('DomContentLoaded', addTeamLeadDropDown(teams_test_data['employees']))
-//document.addEventListener('DOMContentLoaded', displayTable(teams_test_data['teams']))
 
+//Initial Display
 document.addEventListener('DOMContentLoaded', function(event) {
     var req = new XMLHttpRequest();
     req.open('GET', baseUrl, true);
@@ -310,15 +296,11 @@ document.addEventListener('DOMContentLoaded', function(event) {
 
         event.preventDefault();
     })
-
-    
-
-
 });
 
 
-//document.getElementById('new-team-submit-button').addEventListener('click', getNewTeamData);
 
+//Event Listener for New Team Button
 document.getElementById('new-team-submit-button').addEventListener('click', function(event){
     var req = new XMLHttpRequest();
     req.open("POST", baseUrl, true);
@@ -337,8 +319,42 @@ document.getElementById('new-team-submit-button').addEventListener('click', func
     });
 
     new_team_data = getNewTeamData()
+    new_team_data['new_team'] = true;
     req.send(JSON.stringify(new_team_data));
     document.getElementById("new-team-form").reset();
     event.preventDefault();
 });
 
+/* Add Event Listeners for Add Team Member Buttons*/
+let bindAddMemberButtons = function(dataSet){
+    for(i = 0; i < dataSet.length; i++){
+        team_id = dataSet[i]['team_id'];
+
+        button = document.getElementById(`add-member-to-team${team_id}`);
+        button.addEventListener('click', function(team_id){
+            employee_id = document.getElementById(`new-member-input-for-team${team_id}`).value;
+            var req = new XMLHttpRequest();
+            req.open("POST", baseUrl, true);
+            req.setRequestHeader('Content-Type', 'application/json');
+        
+            req.addEventListener('load', function(){
+                if(req.status >= 200 && req.status <400){
+                    var response = JSON.parse(req.responseText)
+        
+                    deleteTable()
+                    displayTable(response['teams'])
+                }
+                else{
+                    console.log(req.statusText)
+                }
+            });
+        
+
+            var new_member_data = {'employee_id_input' : employee_id, 'team_id_input' : team_id}
+            new_member_data['new_member'] = true;
+            req.send(JSON.stringify(new_member_data));
+            event.preventDefault();
+
+        }.bind(button, team_id));
+    }
+}

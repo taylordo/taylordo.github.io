@@ -14,7 +14,7 @@ const getAllEmployeesQuery = "SELECT employee_id, first_name, last_name FROM Emp
 const getEmployeesByTeamQuery = "SELECT employee_id, first_name, last_name FROM employees_teams INNER JOIN Employees ON employees_teams.employee = Employees.employee_id WHERE team = ";
 
 const insertNewTeamQuery = "INSERT INTO Teams (`team_name`, `daily_meeting_time`, `meeting_location`, `team_leader`) VALUES (?, ?, ?, ?)";
-
+const insertNewMemberQuery = "INSERT INTO employees_teams (employee, team) VALUES (?,?)";
 
 
 const getAllTeams = (res, context, employees_teams_complete) => {
@@ -53,31 +53,35 @@ const getEmployeesByTeam = (res, team, complete) => {
     })
   }
 
+const getAllData = (res, next) => {
+  var context = {};
+  var callbackCount = 0;
+
+  getAllTeams(res, context, employees_teams_complete);
+  getAllEmployees(res, context, employees_teams_complete);
+  
+  function employees_teams_complete(){
+      callbackCount++;
+      if (callbackCount >= 2){
+          for(i = 0; i < context.teams.length; i++){
+              getEmployeesByTeam(res, context.teams[i], complete);
+          }
+      }
+  }
+
+  function complete(){
+      callbackCount++;
+      if(callbackCount >= 2 + context.teams.length){
+          res.json(context)
+      }
+  }
+  
+}
+
 
 //Initial Data Display
 app.get('/',function(req,res,next){
-    var context = {};
-    var callbackCount = 0;
-  
-    getAllTeams(res, context, employees_teams_complete);
-    getAllEmployees(res, context, employees_teams_complete);
-    
-    function employees_teams_complete(){
-        callbackCount++;
-        if (callbackCount >= 2){
-            for(i = 0; i < context.teams.length; i++){
-                getEmployeesByTeam(res, context.teams[i], complete);
-            }
-        }
-    }
-
-    function complete(){
-        callbackCount++;
-        if(callbackCount >= 2 + context.teams.length){
-            res.json(context)
-        }
-    }
-
+    getAllData(res, next)
   });
 
 
@@ -85,35 +89,29 @@ app.get('/',function(req,res,next){
 
 app.post('/',function(req,res,next){
     
-    var {team_name_input, daily_meeting_time_input, meeting_location_input, team_leader_input} = req.body;
-    mysql.pool.query(insertNewTeamQuery, [team_name_input, daily_meeting_time_input, meeting_location_input, team_leader_input], function(err, result){
-      if(err){
-        next(err);
-        return;
-      }
-      
-      var context = {};
-      var callbackCount = 0;
-    
-      getAllTeams(res, context, employees_teams_complete);
-      getAllEmployees(res, context, employees_teams_complete);
-      
-      function employees_teams_complete(){
-          callbackCount++;
-          if (callbackCount >= 2){
-              for(i = 0; i < context.teams.length; i++){
-                  getEmployeesByTeam(res, context.teams[i], complete);
-              }
-          }
-      }
-  
-      function complete(){
-          callbackCount++;
-          if(callbackCount >= 2 + context.teams.length){
-              res.json(context)
-          }
-      }
-    });
+    if (req.body.new_team == true){
+      //submit new team
+      var {team_name_input, daily_meeting_time_input, meeting_location_input, team_leader_input} = req.body;
+      mysql.pool.query(insertNewTeamQuery, [team_name_input, daily_meeting_time_input, meeting_location_input, team_leader_input], function(err, result){
+        if(err){
+          next(err);
+          return;
+        }
+        getAllData(res, next)
+      });
+    }
+    else{
+      //submit new team member to team
+      var {employee_id_input, team_id_input} = req.body;
+      mysql.pool.query(insertNewMemberQuery, [employee_id_input, team_id_input], function(err, result){
+        if(err){
+          next(err);
+          return;
+        }
+        getAllData(res, next)
+      });
+    }
+
     
   });
 
