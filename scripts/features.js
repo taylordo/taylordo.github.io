@@ -176,7 +176,7 @@ let deleteTable = function() {
     }
 }
 
-let baseUrl = "http://flip2.engr.oregonstate.edu:4756/"
+let baseUrl = "http://flip1.engr.oregonstate.edu:4758/"
 
 //Initial Display
 document.addEventListener('DOMContentLoaded', function(event) {
