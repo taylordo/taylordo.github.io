@@ -17,6 +17,20 @@ let getFeatData = function() {
     return featSubData
     }
 
+let generateTeamChoice = function(dataSet) {
+    const teamSubmit = document.getElementById('new_team_input');
+    
+    while (teamSubmit.firstElementChild != null) {
+        teamSubmit.removeChild(teamSubmit.firstElementChild)
+    }
+
+    for (i = 0; i < dataSet.length; i++) {
+        let option = document.createElement('option')
+        option.textContent = `${dataSet[i].team_name}`;
+        option.setAttribute('value', dataSet[i].team_id);
+        teamSubmit.add(option)
+    }
+}
 /* Generate Table of pre-existing Features onto  */
 
 let attachFeatCard = function (dataSet, team) {
@@ -38,6 +52,7 @@ let generateFeatCard = function (dataSet, team) {
     fieldset.appendChild(generateStatus(dataSet));
     fieldset.appendChild(generateTeam(dataSet, team));
     fieldset.appendChild(generateUpdate(dataSet));
+    fieldset.appendChild(generateSubmitChanges(dataSet));
     fieldset.appendChild(generateDelete(dataSet));
     
 
@@ -65,7 +80,7 @@ let generateTextArea = function (dataSet) {
     textArea.setAttribute('name', `description${dataSet.feature_id}`);
     textArea.setAttribute('rows', 4);
     textArea.setAttribute('columns', 150);
-    textArea.setAttribute('id', 'description');
+    textArea.setAttribute('id', `description${dataSet.feature_id}`);
     textArea.textContent = dataSet.description;
     textArea.disabled = true;
     return textArea;
@@ -102,40 +117,30 @@ let generateStatus = function (dataSet) {
 let generateTeam = function (dataSet, team) {
     let input = document.createElement('select');
     let nullOption = document.createElement('option');
-    nullOption.textContent = 'No Team';
-    nullOption.setAttribute('value', null);
-    if (dataSet.team === null) {
-        input.add(nullOption);
-        for(i = 0; i < team.length; i++) {
+
+    for(i = 0; i < team.length; i++) {
+        if(dataSet.team === team[i].team_id) {
             let option = document.createElement('option');
-            option.setAttribute('id', `team${team[i].team_id}`)
+            option.setAttribute('id', `${team[i].team_id}`)
+            option.setAttribute('value', `${team[i].team_id}`)
             option.textContent = team[i].team_name
             input.add(option)
-        } 
-    } else {
-        for(i = 0; i < team.length; i++) {
-            if(dataSet.team === team[i].team_id) {
-                let option = document.createElement('option');
-                option.setAttribute('id', `team${team[i].team_id}`)
-                option.textContent = team[i].team_name
-                input.add(option)
-                break;
-            }
-        }
-        input.add(nullOption);
-        for(j = 0; j < team.length; j++) {
-            if(dataSet.team !== team[j].team_id) {
-                let option = document.createElement('option');
-                option.setAttribute('id', `team${team[j].team_id}`)
-                option.textContent = team[j].team_name
-                input.add(option)
-            }
+            break;
         }
     }
-    input.setAttribute('type', 'text');
+    for(j = 0; j < team.length; j++) {
+        if(dataSet.team !== team[j].team_id) {
+            let option = document.createElement('option');
+            option.setAttribute('id', `${team[j].team_id}`)
+            option.setAttribute('value', `${team[j].team_id}`)
+            option.textContent = team[j].team_name
+            input.add(option)
+        }
+    }
+    
     input.setAttribute('id', `team${dataSet.feature_id}`)
     // Add select if no team
-    input.setAttribute('value', dataSet.team);
+    // input.setAttribute('value', dataSet.team_id);
     input.disabled = true;
     const label = generateLabel(`team${dataSet.feature_id}`, 'Team Assigned: ');
     label.appendChild(input);
@@ -144,28 +149,30 @@ let generateTeam = function (dataSet, team) {
 
 let generateUpdate = function (dataSet) {
     let input = document.createElement('input');
-    input.setAttribute('type', 'submit');
+    input.setAttribute('type', 'button');
     input.setAttribute('id', `edit${dataSet.feature_id}`);
     input.setAttribute('value', 'Edit');
+    input.setAttribute('onclick', 'updateInformation(' + dataSet.feature_id + ')');
     return input;
 }
 
 let generateDelete = function (dataSet) {
     let input = document.createElement('input');
-    input.setAttribute('type', 'submit');
+    input.setAttribute('type', 'button');
     input.setAttribute('id', `delete${dataSet.feature_id}`);
     input.setAttribute('value', 'Delete');
+    input.setAttribute('onclick', 'deleteRow(' + dataSet.feature_id + ')');
     return input;
 }
 
-let generateTeamChoice = function(dataSet) {
-    const teamSubmit = document.getElementById('new_team_input');
-    for (i = 0; i < dataSet.length; i++) {
-        let option = document.createElement('option')
-        option.textContent = `${dataSet[i].team_name}`;
-        option.setAttribute('value', dataSet[i].team_id);
-        teamSubmit.add(option)
-    }
+let generateSubmitChanges = function(dataSet) {
+    let input = document.createElement('input');
+    input.setAttribute('type', 'button');
+    input.setAttribute('id', `submitUpdate${dataSet.feature_id}`);
+    input.setAttribute('value', 'Submit Changes?');
+    input.setAttribute('onclick', 'submitChanges(' + dataSet.feature_id + ')');
+    input.hidden = true;
+    return input;
 }
 
 let deleteTable = function() {
@@ -176,7 +183,86 @@ let deleteTable = function() {
     }
 }
 
+// Submission functions
+
+let submitChanges = function(feature_id) {
+    let description = document.getElementById(`description${feature_id}`).value;
+    let date = document.getElementById(`date${feature_id}`).value;
+    let status = document.getElementById(`status${feature_id}`).value;
+    let team = document.getElementById(`team${feature_id}`).value;
+
+    let body = {description, date, status, team, feature_id}
+
+    console.log(body)
+
+    let req = new XMLHttpRequest();
+    req.open("PUT", baseUrl, true);
+    req.setRequestHeader('Content-Type', 'application/json');
+    req.send(JSON.stringify(body))
+
+    req.addEventListener('load',function(){
+        if(req.status >=200 && req.status < 400){
+            var response = JSON.parse(req.responseText)
+            
+            console.log(response)
+        }
+        else{
+            console.log(req.statusText)
+        }
+
+    deleteTable();
+    console.log(response);
+    attachFeatCard(response['rows'], response['team']);
+    });
+};
+
+let updateInformation = function(feature_id) {
+    let description = document.getElementById(`description${feature_id}`);
+    let date = document.getElementById(`date${feature_id}`);
+    let status = document.getElementById(`status${feature_id}`);
+    let team = document.getElementById(`team${feature_id}`);
+    let edit = document.getElementById(`edit${feature_id}`);
+    let submit = document.getElementById(`submitUpdate${feature_id}`);
+
+    description.disabled = false;
+    date.disabled = false;
+    status.disabled = false;
+    team.disabled = false;
+    edit.hidden = true;
+    submit.hidden = false;
+
+};
+
+let deleteRow = function(feature_id) {
+
+    let body = {feature_id};
+
+    console.log(body)
+
+    let req = new XMLHttpRequest();
+    req.open("DELETE", baseUrl, true);
+    req.setRequestHeader('Content-Type', 'application/json');
+    req.send(JSON.stringify(body))
+
+    req.addEventListener('load',function(){
+        if(req.status >=200 && req.status < 400){
+            var response = JSON.parse(req.responseText)
+            
+            console.log(response)
+        }
+        else{
+            console.log(req.statusText)
+        }
+
+    deleteTable();
+    console.log(response);
+    attachFeatCard(response['rows'], response['team']);
+    });
+};
+
+
 let baseUrl = "http://flip1.engr.oregonstate.edu:4758/"
+// let baseUrl = "http://flip1.engr.oregonstate.edu:4760/"
 
 //Initial Display
 document.addEventListener('DOMContentLoaded', function(event) {
@@ -211,10 +297,9 @@ req.addEventListener('load',function(){
         var response = JSON.parse(req.responseText)
         
         console.log(response)
-        // deleteTable()
-        // generateTeamChoice(response['team']);
-        // attachFeatCard(response['rows'], response['team']);
-        location.reload();
+        deleteTable()
+        generateTeamChoice(response['team']);
+        attachFeatCard(response['rows'], response['team']);
         
     }
     else{
@@ -226,6 +311,6 @@ new_feat_data = getFeatData()
 console.log(new_feat_data)
 req.send(JSON.stringify(new_feat_data));
 // document.getElementById("new_submit").reset();
-// event.preventDefault();
+event.preventDefault();
 
 })
