@@ -12,26 +12,33 @@ let getNewBugData = function() {
     new_bug_data["new_completion_input"] = new_completion_input;
     new_bug_data["new_employee_input"] = new_employee_input;
     
-    console.log(new_bug_data)
     return new_bug_data;
 }
 
 function deleteTable(){
     //deletes the table
-    const rootParent = document.getElementById('featured_bugs');
-    
+    const rootParent = document.getElementById('featured-bugs');
+    if (rootParent != null) {
     while(rootParent.firstElementChild != null){
         rootParent.removeChild(rootParent.firstElementChild)
     }
-
+    }
 }
 
 /* Generate Table of pre-existing bugs onto  */
 
-let attachBugCard = function (dataSet, empData) {
+let attachBugCard = function (dataSet, empData, filter) {
     const rootParent = document.getElementById('featured-bugs');
-    for (let i = 0; i < dataSet.length; i++) {
-        rootParent.appendChild(generateBugCard(dataSet[i], empData));
+    if (filter === 'all') {
+        for (let j = 0; j < dataSet.length; j++) {
+            rootParent.appendChild(generateBugCard(dataSet[j], empData));
+        }
+    } else {
+        for (let i = 0; i < dataSet.length; i++) {
+            if (dataSet[i].complete == filter) {
+            rootParent.appendChild(generateBugCard(dataSet[i], empData));
+            }
+        }
     }
 }
 
@@ -53,12 +60,14 @@ let generateBugCard = function (dataSet, empData) {
     fieldset.appendChild(generateTextArea(dataSet));
     fieldset.appendChild(br);
     fieldset.appendChild(generateUrgency(dataSet));
-    fieldset.appendChild(generateName(dataSet, getName));
+    fieldset.appendChild(generateName(dataSet, empData, getName, dataEmpNumber));
     fieldset.appendChild(br1)
     fieldset.appendChild(generateUpdate(dataSet));
+    fieldset.appendChild(generateSubmitUpdate(dataSet));
     fieldset.appendChild(generateDelete(dataSet));
+    if (dataSet.complete === 0) {
     fieldset.appendChild(generateResolved(dataSet));
-
+    }
     /* Complete append of items to document. */
     form.appendChild(fieldset);
 
@@ -74,10 +83,10 @@ let generateLabel = function (name, content) {
 
 let generateTextArea = function (dataSet) {
     const textArea = document.createElement('textarea');
-    textArea.setAttribute('name', `description${dataSet.id}`);
+    textArea.setAttribute('name', `description${dataSet.bug_id}`);
     textArea.setAttribute('rows', 4);
     textArea.setAttribute('columns', 150);
-    textArea.setAttribute('bug_id', 'description');
+    textArea.setAttribute('id', `description${dataSet.bug_id}`);
     textArea.textContent = dataSet.description;
     textArea.disabled = true;
     return textArea;
@@ -85,9 +94,9 @@ let generateTextArea = function (dataSet) {
 
 let generateHeader = function (dataSet) {
     const header = document.createElement('h3');
-    header.setAttribute('resolved', dataSet.resolved);
+    header.setAttribute('resolved', dataSet.complete);
     let resolveStatus = ''
-    if (dataSet.resolved === true) {
+    if (dataSet.complete == 1) {
         resolveStatus = 'Resolved'
         header.style.textDecoration = "line-through";
     }
@@ -98,20 +107,31 @@ let generateHeader = function (dataSet) {
 let generateUrgency = function (dataSet) {
     const input = document.createElement('input');
     input.setAttribute('type', 'number');
-    input.setAttribute('id', `urgency${dataSet.id}`);
+    input.setAttribute('id', `urgency${dataSet.bug_id}`);
     input.setAttribute('value', dataSet.urgency);
     input.disabled = true;
-    const label = generateLabel(`urgency${dataSet.id}`, ' Urgency Level: ')
+    const label = generateLabel(`urgency${dataSet.bug_id}`, ' Urgency Level: ')
     label.appendChild(input);
     return label;
 }
 
-let generateName = function (dataSet, empName) {
-    const input = document.createElement('input');
-    const employeeNum = `employee${dataSet.id}`
-    input.setAttribute('type', 'text');
+let generateName = function (dataSet, empData, empName, dataEmpNumber) {
+    const input = document.createElement('select');
+    const employeeNum = `employee${dataSet.bug_id}`;
     input.setAttribute('id', employeeNum);
-    input.setAttribute('value', empName);
+
+    const staticEmployee = document.createElement('option');
+    staticEmployee.setAttribute('value', `employee${dataEmpNumber}`);
+    staticEmployee.textContent = empName;
+    input.add(staticEmployee);
+
+    for (i = 0; i < empData.length; i++) {
+        if (empData[i].employee_id !== dataEmpNumber) {
+            const empName = `${empData[i].first_name} ${empData[i].last_name}`
+            input.add(addRowEmployeeDropDown(empData[i].employee_id, empName));
+        }
+    }
+    
     input.disabled = true;
     const label = generateLabel(employeeNum, ' Employee Assigned: ');
     label.appendChild(input);
@@ -120,31 +140,55 @@ let generateName = function (dataSet, empName) {
 
 let generateUpdate = function (dataSet) {
     let input = document.createElement('input');
-    input.setAttribute('type', 'submit');
-    input.setAttribute('id', `edit${dataSet.id}`)
+    input.setAttribute('type', 'button');
+    input.setAttribute('id', `edit${dataSet.bug_id}`)
     input.setAttribute('value', 'Edit');
+    input.setAttribute('onclick', "revealUpdate(" + dataSet.bug_id + ")")
     return input;
 }
 
 let generateDelete = function (dataSet) {
     let input = document.createElement('input');
-    input.setAttribute('type', 'submit');
-    input.setAttribute('id', `delete${dataSet.id}`);
+    input.setAttribute('type', 'button');
+    input.setAttribute('id', `delete${dataSet.bug_id}`);
     input.setAttribute('value', 'Delete');
+    input.setAttribute('onclick', 'deleteRow(' + dataSet.bug_id + ')');
     return input;
 }
 
 let generateResolved = function (dataSet) {
     let input = document.createElement('input');
-    input.setAttribute('type', 'submit');
-    input.setAttribute('id', `resolved${dataSet.id}`);
+    input.setAttribute('type', 'button');
+    input.setAttribute('id', `resolved${dataSet.bug_id}`);
     input.setAttribute('value', 'Resolved');
+    input.setAttribute('onclick', 'resolveIssue('+ dataSet.bug_id + ')');
     return input;
 }
 
+let generateSubmitUpdate = function (dataSet) {
+    let input = document.createElement('input');
+    input.setAttribute('type', 'button');
+    input.setAttribute('id', `submit_update${dataSet.bug_id}`);
+    input.setAttribute('value', 'Submit Update?')
+    input.setAttribute('onclick', "submitUpdate(" + dataSet.bug_id + ")");
+    input.hidden = true;
+    return input;
+}
+
+let addRowEmployeeDropDown = function (empId, empName) {
+    let dataPoint = document.createElement('option');
+    dataPoint.setAttribute('value', empId);
+    dataPoint.textContent = empName;
+    return dataPoint;
+}
+
 let addEmployeeDropDown = function (dataSet) {
-    console.log(dataSet)
     const empInput = document.getElementById('new_employee_input');
+
+    while (empInput.firstElementChild != null) {
+        empInput.removeChild(empInput.firstElementChild)
+    }
+
     for (i = 0; i < dataSet.length; i++) {
         let dataPoint = document.createElement('option');
         dataPoint.setAttribute('value', dataSet[i].employee_id);
@@ -153,10 +197,118 @@ let addEmployeeDropDown = function (dataSet) {
     }
 }
 
-let baseUrl = "http://flip1.engr.oregonstate.edu:4759/"
 
-//Initial Display
-document.addEventListener('DOMContentLoaded', function(event) {
+// Onclick functions for table operations.
+
+let revealUpdate = function(bug_id) {
+    let description = document.getElementById(`description${bug_id}`);
+    let urgency = document.getElementById(`urgency${bug_id}`);
+    let employee = document.getElementById(`employee${bug_id}`);
+    let edit = document.getElementById(`edit${bug_id}`);
+    let submit = document.getElementById(`submit_update${bug_id}`);
+
+    description.disabled = false;
+    urgency.disabled = false;
+    employee.disabled = false;
+    edit.hidden = true;
+    submit.hidden = false;
+};
+
+let submitUpdate = function(bug_id) {
+    console.log(bug_id);
+    let description = document.getElementById(`description${bug_id}`).value;
+    let urgency = document.getElementById(`urgency${bug_id}`).value;
+    let employee = document.getElementById(`employee${bug_id}`).value;
+
+    var body= {description, urgency, employee, bug_id};
+    console.log("body Stuff");
+    console.log(body);
+
+    let req = new XMLHttpRequest();
+
+    req.open('PUT', baseUrl, true);
+    req.setRequestHeader('Content-Type', 'application/json');
+    req.send(JSON.stringify(body));
+    
+    req.addEventListener('load',function(){
+        if(req.status >=200 && req.status < 400){
+            var response = JSON.parse(req.responseText)
+            
+            // deleteTable()
+            // attachBugCard(response['rows'])
+            console.log(response)
+        }
+        else{
+            console.log(req.statusText)
+        }
+
+    deleteTable();
+    addEmployeeDropDown(response['employees']);
+    attachBugCard(response['rows'], response['employees'], 'all');
+    });
+    
+};
+
+let resolveIssue = function(bug_id) {
+    const resolved = 1;
+    var body = {resolved, bug_id};
+
+    let req = new XMLHttpRequest();
+
+    req.open('PUT', baseUrl, true);
+    req.setRequestHeader('Content-Type', 'application/json');
+    req.send(JSON.stringify(body));
+    
+    req.addEventListener('load',function(){
+        if(req.status >=200 && req.status < 400){
+            var response = JSON.parse(req.responseText)
+            
+            // deleteTable()
+            // attachBugCard(response['rows'])
+            console.log(response)
+        }
+        else{
+            console.log(req.statusText)
+        }
+
+    deleteTable();
+    addEmployeeDropDown(response['employees']);
+    attachBugCard(response['rows'], response['employees'], 'all');
+    });
+}
+
+let deleteRow = function(bug_id) {
+    var body = {bug_id}
+
+    let req = new XMLHttpRequest();
+
+    req.open('DELETE', baseUrl, true);
+    req.setRequestHeader('Content-Type', 'application/json');
+    req.send(JSON.stringify(body));
+    
+    req.addEventListener('load',function(){
+        if(req.status >=200 && req.status < 400){
+            var response = JSON.parse(req.responseText)
+            
+            // deleteTable()
+            // attachBugCard(response['rows'])
+            console.log(response)
+        }
+        else{
+            console.log(req.statusText)
+        }
+
+    deleteTable();
+    addEmployeeDropDown(response['employees']);
+    attachBugCard(response['rows'], response['employees'], 'all');
+    });
+}
+
+// let baseUrl = "http://flip1.engr.oregonstate.edu:4759/"
+let baseUrl = "http://flip1.engr.oregonstate.edu:4760/"
+
+//Initial Display Get request
+let getRequest = function(filter) {
     var req = new XMLHttpRequest();
     req.open('GET', baseUrl, true);
     req.send(null);
@@ -168,14 +320,12 @@ document.addEventListener('DOMContentLoaded', function(event) {
         } else {
             console.log(req.statusText);
         }
-
-        console.log(response);
+        deleteTable();
         addEmployeeDropDown(response['employees'])
-        attachBugCard(response['rows'], response['employees'])
-        event.preventDefault();
-    })
-
-});
+        attachBugCard(response['rows'], response['employees'], filter)
+        // event.preventDefault();
+    });
+}
 
 //Event listener for new bugs button
 document.getElementById('new_submit').addEventListener('click', function(event){
@@ -194,12 +344,41 @@ document.getElementById('new_submit').addEventListener('click', function(event){
         else{
             console.log(req.statusText)
         }
+        deleteTable();
+        addEmployeeDropDown(response['employees']);
+        attachBugCard(response['rows'], response['employees'], 'all');
     });
-    
     new_bug_data = getNewBugData()
-    console.log(new_bug_data)
     req.send(JSON.stringify(new_bug_data));
-    // document.getElementById("new_submit").reset();
-    // event.preventDefault();
 
-  })
+
+    event.preventDefault();
+  });
+
+
+// Load all bugs on page initially
+document.addEventListener('DOMContentLoaded', function(event) {
+    getRequest('all');
+    event.preventDefault();
+});
+
+// Filters for displaying elements.
+document.getElementById('resolved_filter').addEventListener('click', function(event) {
+    let filter = document.getElementById('resolved_filter').value;
+    getRequest(filter);
+    event.preventDefault();
+});
+
+document.getElementById('unresolved_filter').addEventListener('click', function(event) {
+    let filter = document.getElementById('unresolved_filter').value;
+    getRequest(filter);
+    event.preventDefault();
+});
+
+document.getElementById('all_filter').addEventListener('click', function(event) {
+    let filter = document.getElementById('all_filter').value;
+    getRequest(filter);
+    event.preventDefault();
+});
+
+// Reveal items so that contents can be updated.
