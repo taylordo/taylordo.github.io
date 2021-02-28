@@ -16,6 +16,9 @@ const getEmployeesByTeamQuery = "SELECT employee_id, first_name, last_name FROM 
 const insertNewTeamQuery = "INSERT INTO Teams (`team_name`, `daily_meeting_time`, `meeting_location`, `team_leader`) VALUES (?, ?, ?, ?)";
 const insertNewMemberQuery = "INSERT INTO employees_teams (employee, team) VALUES (?,?)";
 
+const deleteMemberQuery = "DELETE FROM employees_teams WHERE employee = ? AND team = ?"
+const deleteTeamQuery = "DELETE FROM Teams WHERE team_id = ?"
+
 
 const getAllTeams = (res, context, employees_teams_complete) => {
   mysql.pool.query(getAllTeamsQuery, (err, results, fields) => {
@@ -85,7 +88,7 @@ app.get('/',function(req,res,next){
   });
 
 
-//Insert New Team
+//Insert New Team or Insert new team member
 
 app.post('/',function(req,res,next){
     
@@ -114,6 +117,38 @@ app.post('/',function(req,res,next){
 
     
   });
+
+
+//Delete Team or Team Member
+app.delete('/',function(req,res,next){
+    
+  if (req.body.delete_member == true){
+    //delete team member
+    var {employee_id_input, team_id_input} = req.body;
+    mysql.pool.query(deleteMemberQuery, [employee_id_input, team_id_input], function(err, result){
+      if(err){
+        next(err);
+        return;
+      }
+      getAllData(res, next)
+    });
+  }
+  else{
+    //delete team
+    var {team_id_input} = req.body;
+    mysql.pool.query(deleteTeamQuery, [team_id_input], function(err, result){
+      if(err){
+        next(err);
+        return;
+      }
+      getAllData(res, next)
+    });
+  }
+  
+
+  
+});
+
 
 
 

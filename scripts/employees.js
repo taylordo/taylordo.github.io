@@ -354,27 +354,6 @@ let bindEditEmployeeButtons = function(dataSet){
         enableUpdateFields(employee_id, dataSet);
         disableOtherButtonsAndFields(dataSet);
         
-        
-        /*
-        var req = new XMLHttpRequest();
-        req.open("PUT", baseUrl, true);
-        req.setRequestHeader('Content-Type', 'application/json');
-    
-        req.addEventListener('load', function(){
-            if(req.status >= 200 && req.status <400){
-                var response = JSON.parse(req.responseText)
-    
-                deleteTable()
-                displayTable(response['rows'])
-            }
-            else{
-                console.log(req.statusText)
-            }
-        });
-    
-        var edit_employee_data = getUpdateEmployeeData()
-        req.send(JSON.stringify(edit_employee_data));
-        */
         event.preventDefault();
         }.bind(button, employee_id));   
     }

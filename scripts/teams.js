@@ -56,12 +56,16 @@ let displayTable = function (dataSet) {
         rootParent.appendChild(generateTeamCard(dataSet[i]));
     }
 
-    bindAddMemberButtons(dataSet)
+    bindAddMemberButtons(dataSet);
+    bindDeleteMemberButtons(dataSet);
+    bindDeleteTeamButtons(dataSet);
+    bindEditTeamButtons(dataSet);
 }
 
 let generateTeamCard = function (dataSet) {
     const form = document.createElement('form');
     const fieldset = document.createElement('fieldset');
+    fieldset.setAttribute('id', `update-fields${dataSet.team_id}`)
     /* Add content to card */
     fieldset.appendChild(generateID(dataSet));
     fieldset.appendChild(generateTeamName(dataSet));
@@ -98,7 +102,7 @@ let generateID = function (dataSet) {
 let generateTeamName = function (dataSet) {
     const input = document.createElement('input');
     input.setAttribute('type', 'text');
-    input.setAttribute('id', `team-name${dataSet.id}`);
+    input.setAttribute('id', `team-name${dataSet.team_id}`);
     input.setAttribute('value', dataSet.team_name)
     input.disabled = true;
     const label = generateLabel(`team-name${dataSet.id}`, ' Team Name: ');
@@ -110,10 +114,10 @@ let generateTeamName = function (dataSet) {
 let generateDailyMeetingTime = function (dataSet) {
     const input = document.createElement('input');
     input.setAttribute('type', 'text');
-    input.setAttribute('id', `daily-meeting-time${dataSet.id}`);
+    input.setAttribute('id', `daily-meeting-time${dataSet.team_id}`);
     input.setAttribute('value', dataSet.daily_meeting_time)
     input.disabled = true;
-    const label = generateLabel(`daily-meeting-time${dataSet.id}`, ' Daily Meeting Time: ');
+    const label = generateLabel(`daily-meeting-time${dataSet.team_id}`, ' Daily Meeting Time: ');
     label.appendChild(input);
     return label;
 }
@@ -121,20 +125,45 @@ let generateDailyMeetingTime = function (dataSet) {
 let generateMeetingLocation= function (dataSet) {
     const input = document.createElement('input');
     input.setAttribute('type', 'text');
-    input.setAttribute('id', `meeting-location${dataSet.id}`);
+    input.setAttribute('id', `meeting-location${dataSet.team_id}`);
     input.setAttribute('value', dataSet.meeting_location)
     input.disabled = true;
-    const label = generateLabel(`meeting-location${dataSet.id}`, ' Meeting Location: ');
+    const label = generateLabel(`meeting-location${dataSet.team_id}`, ' Meeting Location: ');
     label.appendChild(input);
     return label;
 }
 
 let generateTeamLeader= function (dataSet) {
-    const input = document.createElement('input');
-    input.setAttribute('type', 'text');
-    input.setAttribute('id', `team-leader${dataSet.id}`);
+    //const input = document.createElement('input');
+    //input.setAttribute('type', 'text');
+    //input.setAttribute('id', `team-leader${dataSet.id}`);
 
-    var team_leader = 'null'
+    dropdown = document.createElement('select');
+    dropdown.setAttribute('id', `team-leader${dataSet.team_id}`);
+    dropdown.setAttribute('style', 'width:153px');
+
+    let initialDropdownDisplay = document.createElement('option')
+    initialDropdownDisplay.setAttribute('value', '');
+    initialDropdownDisplay.textContent = ''
+    dropdown.appendChild(initialDropdownDisplay)
+
+    var team_leader_id = dataSet.team_leader;
+
+    for(i=0; i < all_employees.length; i++){
+        employee = document.createElement('option');
+        employee.setAttribute('value', all_employees[i].employee_id);
+
+        if (team_leader_id == all_employees[i].employee_id){
+            employee.selected = true;
+        }
+
+        employee.textContent = all_employees[i].first_name + ' ' + all_employees[i].last_name;
+        dropdown.appendChild(employee)
+
+    }
+
+    /*
+    var team_leader = null;
     for(i = 0; i < all_employees.length; i++){
         if (all_employees[i].employee_id == dataSet.team_leader){
             team_leader = all_employees[i].first_name + ' ' + all_employees[i].last_name;
@@ -142,18 +171,18 @@ let generateTeamLeader= function (dataSet) {
     }
 
     input.setAttribute('value', team_leader)
+    */
 
-
-    input.disabled = true;
+    dropdown.disabled = true;
     const label = generateLabel(`team-leader${dataSet.id}`, ' Team Lead: ');
-    label.appendChild(input);
+    label.appendChild(dropdown);
     return label;
 }
 
 let generateEditButton = function (dataSet) {
     let input = document.createElement('input');
     input.setAttribute('type', 'submit');
-    input.setAttribute('id', `edit${dataSet.id}`);
+    input.setAttribute('id', `edit-team${dataSet.team_id}`);
     input.setAttribute('value', 'Edit');
     return input;
 }
@@ -235,7 +264,35 @@ let generateDeleteTeamButton = function (team) {
     return input
 }
 
+let enableUpdateFields = function (team_id, dataSet) {
+    console.log('here?')
+    //fieldset = document.getElementById(`update-fields${team_id}`)
 
+    field = document.getElementById(`team-name${team_id}`)
+    field.disabled = false;
+
+    field = document.getElementById(`daily-meeting-time${team_id}`)
+    field.disabled = false;
+
+    field = document.getElementById(`meeting-location${team_id}`)
+    field.disabled = false;
+
+    field = document.getElementById(`team-leader${team_id}`)
+    field.disabled = false;
+    
+    /*
+    edit_button = document.getElementById(`edit-employee${employee_id}`)
+    edit_button.style.display = 'none';
+
+    update_button = document.createElement('input')
+    update_button.setAttribute('type', 'submit');
+    update_button.setAttribute('id', `update-employee${employee_id}`);
+    update_button.setAttribute('value', 'Update');
+    fieldset.insertBefore(update_button, fieldset.lastElementChild)
+
+    bind_update_button(update_button, employee_id, dataSet);
+    */
+}
 
 const teams_test_data = { 'teams': [{'team_id': '001', 
     'team_name': 'Franks Team',
@@ -357,4 +414,124 @@ let bindAddMemberButtons = function(dataSet){
 
         }.bind(button, team_id));
     }
+}
+
+/* Add Event Listeners for Delete Team Member Buttons*/
+let bindDeleteMemberButtons = function(dataSet){
+    for(i = 0; i < dataSet.length; i++){
+        team_id = dataSet[i]['team_id'];
+
+        for( j = 0; j < dataSet[i].members.length; j++){
+            employee_id = dataSet[i].members[j].employee_id;
+
+            button = document.getElementById(`delete-member${employee_id}from-team${team_id}`);
+            button.addEventListener('click', function(employee_id, team_id){
+
+                var req = new XMLHttpRequest();
+                req.open("DELETE", baseUrl, true);
+                req.setRequestHeader('Content-Type', 'application/json');
+            
+                req.addEventListener('load', function(){
+                    if(req.status >= 200 && req.status <400){
+                        var response = JSON.parse(req.responseText)
+            
+                        deleteTable()
+                        displayTable(response['teams'])
+                    }
+                    else{
+                        console.log(req.statusText)
+                    }
+                });
+            
+
+                var delete_data = {'employee_id_input' : employee_id, 'team_id_input' : team_id}
+                delete_data['delete_member'] = true;
+                req.send(JSON.stringify(delete_data));
+
+                event.preventDefault();
+            }.bind(button, employee_id, team_id));
+        }
+    }
+}
+
+/* Add Event Listeners for Delete Team Buttons*/
+let bindDeleteTeamButtons = function(dataSet){
+    for(i = 0; i < dataSet.length; i++){
+        team_id = dataSet[i]['team_id'];
+
+        button = document.getElementById(`delete-team${team_id}`);
+        button.addEventListener('click', function(team_id){
+
+            var req = new XMLHttpRequest();
+            req.open("DELETE", baseUrl, true);
+            req.setRequestHeader('Content-Type', 'application/json');
+        
+            req.addEventListener('load', function(){
+                if(req.status >= 200 && req.status <400){
+                    var response = JSON.parse(req.responseText)
+        
+                    deleteTable()
+                    displayTable(response['teams'])
+                }
+                else{
+                    console.log(req.statusText)
+                }
+            });
+        
+
+            var delete_data = {'team_id_input' : team_id}
+            delete_data['delete_team'] = true;
+            req.send(JSON.stringify(delete_data));
+
+            event.preventDefault();
+        }.bind(button, team_id));
+        
+    }
+}
+
+/* Add Event Listeners for Edit Team Buttons*/
+let bindEditTeamButtons = function(dataSet){
+    for(i = 0; i < dataSet.length; i++){
+        team_id = dataSet[i]['team_id'];
+        button = document.getElementById(`edit-team${team_id}`);
+        button.addEventListener('click', function(team_id){
+            console.log(team_id)
+            enableUpdateFields(team_id, dataSet);
+
+            //disableOtherButtonsAndFields(dataSet);
+        
+            event.preventDefault();
+        }.bind(button, team_id));   
+    }
+}
+
+//Event Listener for Update Team Button
+let bind_update_button = function(update_button, employee_id, dataSet){
+    update_button.addEventListener('click', function(){
+      
+        var req = new XMLHttpRequest();
+        req.open("PUT", baseUrl, true);
+        req.setRequestHeader('Content-Type', 'application/json');
+    
+        req.addEventListener('load', function(){
+            if(req.status >= 200 && req.status <400){
+                var response = JSON.parse(req.responseText)
+    
+                deleteTable()
+                displayTable(response['rows'])
+            }
+            else{
+                console.log(req.statusText)
+            }
+        });
+    
+        update_data = getUpdateData(employee_id);
+        console.log(update_data);
+        req.send(JSON.stringify(update_data));
+        
+        disableUpdateFields(employee_id);
+        restoreOtherFieldsAndButtons(dataSet);
+        update_button.style.display = 'none';
+        event.preventDefault();
+    })
 }
