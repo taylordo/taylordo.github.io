@@ -72,7 +72,7 @@ app.delete('/',function(req,res,next){
   
 });
 
-//Insert New Employee
+//Update Employee
 app.put('/',function(req,res,next){
     
   var {employee_id, first_name_input, last_name_input, email_input, date_input} = req.body;

@@ -186,6 +186,7 @@ let disableUpdateFields = function (employee_id) {
     field = document.getElementById(`date${employee_id}`)
     field.disabled = true;
     
+    //restore edit button
     edit_button = document.getElementById(`edit-employee${employee_id}`)
     edit_button.style.display = 'inline';
 }
