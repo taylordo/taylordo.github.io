@@ -5,7 +5,7 @@ var CORS = require('cors')
 var app = express();
 app.use(express.json())
 app.use(express.urlencoded({extended: false}));
-app.set('port', 4758); //4758
+app.set('port', 4760); //4758
 app.use("/public_html", express.static('../../public_html/'));
 app.use(CORS())
 
@@ -51,11 +51,11 @@ app.post('/',function(req,res,next){
 
   console.log(team);
 
-  // mysql.pool.query(insertQuery, [description, date, status, team, feature_id], function(err, result){
-  //   if(err){
-  //     next(err);
-  //     return;
-  //   }
+  mysql.pool.query(insertQuery, [description, date, status, team, feature_id], function(err, result){
+    if(err){
+      next(err);
+      return;
+    }
     mysql.pool.query(getAllQuery, (err, rows, fields) => {
       if(err){
         next(err);
@@ -72,7 +72,7 @@ app.post('/',function(req,res,next){
   });
 });
   
-// });
+});
 
 app.put('/', function(req, res, next) {
 
