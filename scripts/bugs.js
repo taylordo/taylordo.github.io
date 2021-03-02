@@ -11,6 +11,8 @@ let getNewBugData = function() {
     new_bug_data["new_urgency_input"] = new_urgency_input;
     new_bug_data["new_completion_input"] = new_completion_input;
     new_bug_data["new_employee_input"] = new_employee_input;
+
+    document.getElementById('bug-form').reset();
     
     return new_bug_data;
 }
@@ -121,7 +123,7 @@ let generateName = function (dataSet, empData, empName, dataEmpNumber) {
     input.setAttribute('id', employeeNum);
 
     const staticEmployee = document.createElement('option');
-    staticEmployee.setAttribute('value', `employee${dataEmpNumber}`);
+    staticEmployee.setAttribute('value', `${dataEmpNumber}`);
     staticEmployee.textContent = empName;
     input.add(staticEmployee);
 
@@ -305,7 +307,7 @@ let deleteRow = function(bug_id) {
 }
 
 let baseUrl = "http://flip1.engr.oregonstate.edu:4759/"
-// let baseUrl = "http://flip1.engr.oregonstate.edu:4760/"
+// let baseUrl = "http://flip1.engr.oregonstate.edu:4761/"
 
 //Initial Display Get request
 let getRequest = function(filter) {
