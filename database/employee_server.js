@@ -2,13 +2,13 @@ var express = require('express');
 var mysql = require('./dbcon.js');
 var CORS = require('cors')
 
-//var router = express.Router();
+var router = express.Router();
 
 var app = express();
 
 app.use(express.json())
 app.use(express.urlencoded({extended: false}));
-app.set('port', 4756);
+//app.set('port', 4756);
 app.use("/public_html", express.static('../../public_html/'));
 app.use(CORS())
 
@@ -30,9 +30,9 @@ const getAllData = (res) => {
 }
 
 //Initial Data Display
-app.get('/',function(req,res,next){
+router.get('/employees',function(req,res,next){
     var context = {};
-  
+    res.sendFile(path.join(__dirname + '/index.html'));
     mysql.pool.query(getAllQuery, (err, rows, fields) => {
       if(err){
         next(err);
@@ -97,8 +97,10 @@ app.put('/',function(req,res,next){
     console.log(err.status);
   });
   
+  /*
   app.listen(app.get('port'), function(){
     console.log('Express started on http://localhost:' + app.get('port') + '; press Ctrl-C to terminate.');
   });
-    
+    */
 
+module.exports = router;

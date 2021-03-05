@@ -261,8 +261,8 @@ let deleteRow = function(feature_id) {
 };
 
 
-let baseUrl = "http://flip1.engr.oregonstate.edu:4761/"
-// let baseUrl = "http://flip1.engr.oregonstate.edu:4760/"
+let baseUrl = "http://flip1.engr.oregonstate.edu:4756/features"
+
 
 //Initial Display
 document.addEventListener('DOMContentLoaded', function(event) {

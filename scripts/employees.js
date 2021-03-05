@@ -261,7 +261,7 @@ const testData = [{'id': '001',
                 'email': 'taylordo@oregonstate.edu',
                 'date': '2021-02-16'}]
 
-let baseUrl = "http://flip1.engr.oregonstate.edu:4756/"
+let baseUrl = "http://flip1.engr.oregonstate.edu:4756/employees"
 
 //Initial Display
 document.addEventListener('DOMContentLoaded', function(event) {

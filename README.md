@@ -1,3 +1,5 @@
 BugSplat by Donald Taylor and Chris Peterman
 
-Insert Readme stuff
+To run, navigate to the main folder and type:
+
+node main.js

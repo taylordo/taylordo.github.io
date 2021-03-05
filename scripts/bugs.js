@@ -306,8 +306,7 @@ let deleteRow = function(bug_id) {
     });
 }
 
-let baseUrl = "http://flip1.engr.oregonstate.edu:4759/"
-// let baseUrl = "http://flip1.engr.oregonstate.edu:4761/"
+let baseUrl = "http://flip1.engr.oregonstate.edu:4756/bugs"
 
 //Initial Display Get request
 let getRequest = function(filter) {

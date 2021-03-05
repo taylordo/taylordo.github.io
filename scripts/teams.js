@@ -439,7 +439,7 @@ const employee_test_data = [[1,'Don'], [2,'Chris'], [3,'Frank'],
 
 
 
-let baseUrl = "http://flip1.engr.oregonstate.edu:4757/"
+let baseUrl = "http://flip1.engr.oregonstate.edu:4756/teams"
 
 
 //Initial Display
