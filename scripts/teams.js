@@ -8,7 +8,7 @@ let addTeamLeadDropDown = function(employees) {
     dropdown.setAttribute('id', 'team-leader-input')
 
     let initialDropdownDisplay = document.createElement('option')
-    initialDropdownDisplay.setAttribute('value', '');
+    initialDropdownDisplay.setAttribute('value', null);
     initialDropdownDisplay.textContent = ''
     dropdown.appendChild(initialDropdownDisplay)
     for(i=0; i < employees.length; i++){
@@ -31,10 +31,7 @@ let getNewTeamData = function() {
     new_team_data["team_name_input"] = document.getElementById('team-name-input').value;
     new_team_data["daily_meeting_time_input"] = document.getElementById('daily-meeting-time-input').value;
     new_team_data["meeting_location_input"] = document.getElementById('meeting-location-input').value;
-    //new_team_data["feature_input"] = document.getElementById('feature-input').value;
     new_team_data["team_leader_input"] = document.getElementById('team-leader-input').value;
-
-    console.log(new_team_data)
     
     return new_team_data
     }
@@ -134,16 +131,13 @@ let generateMeetingLocation= function (dataSet) {
 }
 
 let generateTeamLeader= function (dataSet) {
-    //const input = document.createElement('input');
-    //input.setAttribute('type', 'text');
-    //input.setAttribute('id', `team-leader${dataSet.id}`);
 
     dropdown = document.createElement('select');
     dropdown.setAttribute('id', `team-leader${dataSet.team_id}`);
     dropdown.setAttribute('style', 'width:153px');
 
     let initialDropdownDisplay = document.createElement('option')
-    initialDropdownDisplay.setAttribute('value', '');
+    initialDropdownDisplay.setAttribute('value', null);
     initialDropdownDisplay.textContent = ''
     dropdown.appendChild(initialDropdownDisplay)
 
@@ -161,17 +155,6 @@ let generateTeamLeader= function (dataSet) {
         dropdown.appendChild(employee)
 
     }
-
-    /*
-    var team_leader = null;
-    for(i = 0; i < all_employees.length; i++){
-        if (all_employees[i].employee_id == dataSet.team_leader){
-            team_leader = all_employees[i].first_name + ' ' + all_employees[i].last_name;
-        }
-    }
-
-    input.setAttribute('value', team_leader)
-    */
 
     dropdown.disabled = true;
     const label = generateLabel(`team-leader${dataSet.id}`, ' Team Lead: ');
@@ -231,7 +214,8 @@ let generateNewTeamMemberDropdown = function (team_id, employees) {
     dropdown.setAttribute('style', 'width:153px');
 
     let initialDropdownDisplay = document.createElement('option')
-    initialDropdownDisplay.setAttribute('value', '');
+    initialDropdownDisplay.setAttribute('id', `null-option${team_id}`)
+    initialDropdownDisplay.setAttribute('value', null);
     initialDropdownDisplay.textContent = ''
     dropdown.appendChild(initialDropdownDisplay)
 
@@ -307,7 +291,7 @@ let changeEditToSubmit = function (team_id, dataSet){
     submit_changes_button = document.createElement('input')
     submit_changes_button.setAttribute('type', 'submit');
     submit_changes_button.setAttribute('id', `update-employee${employee_id}`);
-    submit_changes_button.setAttribute('value', 'Submit Changes?');
+    submit_changes_button.setAttribute('value', 'Update');
 
     fieldset = document.getElementById(`update-fields${team_id}`)
     fieldset.insertBefore(submit_changes_button, document.getElementById(`team-member-header${team_id}`))
@@ -406,6 +390,14 @@ let getUpdateData = function (team_id){
 
 }
 
+let getTeamByTeamId = function (dataSet, team_id){
+    for(i = 0; i < dataSet.length; i++){
+        if (dataSet[i].team_id == team_id){
+            return dataSet[i]
+        }
+    }
+}
+
 const teams_test_data = { 'teams': [{'team_id': '001', 
     'team_name': 'Franks Team',
     'daily_meeting_time': '2pm',
@@ -441,7 +433,6 @@ const employee_test_data = [[1,'Don'], [2,'Chris'], [3,'Frank'],
 
 let baseUrl = "http://flip1.engr.oregonstate.edu:4756/teams"
 
-
 //Initial Display
 document.addEventListener('DOMContentLoaded', function(event) {
     var req = new XMLHttpRequest();
@@ -456,8 +447,6 @@ document.addEventListener('DOMContentLoaded', function(event) {
         } else {
             console.log(req.statusText);
         }
-
-        console.log(response)
 
         all_employees = response['employees']
         addTeamLeadDropDown(all_employees)
@@ -502,28 +491,43 @@ let bindAddMemberButtons = function(dataSet){
         button = document.getElementById(`add-member-to-team${team_id}`);
         button.addEventListener('click', function(team_id){
             employee_id = document.getElementById(`new-member-input-for-team${team_id}`).value;
-            var req = new XMLHttpRequest();
-            req.open("POST", baseUrl, true);
-            req.setRequestHeader('Content-Type', 'application/json');
-        
-            req.addEventListener('load', function(){
-                if(req.status >= 200 && req.status <400){
-                    var response = JSON.parse(req.responseText)
-        
-                    deleteTable()
-                    displayTable(response['teams'])
-                }
-                else{
-                    console.log(req.statusText)
-                }
-            });
-        
 
-            var new_member_data = {'employee_id_input' : employee_id, 'team_id_input' : team_id}
-            new_member_data['new_member'] = true;
-            req.send(JSON.stringify(new_member_data));
-            event.preventDefault();
+            //Make sure the employee we're trying to add isn't already on the team
+            current_team = getTeamByTeamId(dataSet, team_id);
+            current_team_members = current_team.members;
+            current_member_ids = []
+            for (j = 0; j < current_team_members.length; j++){
+                current_member_ids.push(parseInt(current_team_members[j]['employee_id']))
+            }
+            
+            //If the employee isn't already on the team and an employee was selected
+            if(!current_member_ids.includes(parseInt(employee_id)) && employee_id != 'null'){
+                var req = new XMLHttpRequest();
+                req.open("POST", baseUrl, true);
+                req.setRequestHeader('Content-Type', 'application/json');
+            
+                req.addEventListener('load', function(){
+                    if(req.status >= 200 && req.status <400){
+                        var response = JSON.parse(req.responseText)
+            
+                        deleteTable()
+                        displayTable(response['teams'])
+                    }
+                    else{
+                        console.log(req.statusText)
+                    }
+                });
+            
 
+                var new_member_data = {'employee_id_input' : employee_id, 'team_id_input' : team_id}
+                new_member_data['new_member'] = true;
+                req.send(JSON.stringify(new_member_data));
+                event.preventDefault();
+            }
+            else{
+                document.getElementById(`null-option${team_id}`).selected = true;
+                event.preventDefault();
+            }
         }.bind(button, team_id));
     }
 }
@@ -607,7 +611,6 @@ let bindEditTeamButtons = function(dataSet){
         team_id = dataSet[i]['team_id'];
         button = document.getElementById(`edit-team${team_id}`);
         button.addEventListener('click', function(team_id){
-            console.log(team_id)
             enableUpdateFields(team_id);
             changeEditToSubmit(team_id, dataSet);
             disableOtherButtonsAndFields(dataSet);
@@ -638,7 +641,6 @@ let bind_submit_changes_button = function(submit_changes_button, team_id, dataSe
         });
 
         update_data = getUpdateData(team_id);
-        console.log(update_data); 
         req.send(JSON.stringify(update_data));
         
         disableUpdateFields(team_id);

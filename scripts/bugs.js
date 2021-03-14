@@ -122,15 +122,21 @@ let generateName = function (dataSet, empData, empName, dataEmpNumber) {
     const employeeNum = `employee${dataSet.bug_id}`;
     input.setAttribute('id', employeeNum);
 
-    const staticEmployee = document.createElement('option');
-    staticEmployee.setAttribute('value', `${dataEmpNumber}`);
-    staticEmployee.textContent = empName;
-    input.add(staticEmployee);
+    let nullOption = document.createElement('option')
+    nullOption.setAttribute('value', null);
+    nullOption.textContent = ''
+    input.appendChild(nullOption)
 
     for (i = 0; i < empData.length; i++) {
-        if (empData[i].employee_id !== dataEmpNumber) {
-            const empName = `${empData[i].first_name} ${empData[i].last_name}`
-            input.add(addRowEmployeeDropDown(empData[i].employee_id, empName));
+
+        const empName = `${empData[i].first_name} ${empData[i].last_name}`
+        input.add(addRowEmployeeDropDown(empData[i].employee_id, empName));
+
+        if(empData[i].employee_id === dataEmpNumber){
+            employee_option = addRowEmployeeDropDown(empData[i].employee_id, empName);
+            input.add(employee_option)
+            employee_option.selected = true;
+                
         }
     }
     
@@ -171,7 +177,7 @@ let generateSubmitUpdate = function (dataSet) {
     let input = document.createElement('input');
     input.setAttribute('type', 'button');
     input.setAttribute('id', `submit_update${dataSet.bug_id}`);
-    input.setAttribute('value', 'Submit Update?')
+    input.setAttribute('value', 'Update')
     input.setAttribute('onclick', "submitUpdate(" + dataSet.bug_id + ")");
     input.hidden = true;
     return input;
@@ -190,6 +196,11 @@ let addEmployeeDropDown = function (dataSet) {
     while (empInput.firstElementChild != null) {
         empInput.removeChild(empInput.firstElementChild)
     }
+
+    let initialDropdownDisplay = document.createElement('option')
+    initialDropdownDisplay.setAttribute('value', null);
+    initialDropdownDisplay.textContent = ''
+    empInput.appendChild(initialDropdownDisplay)
 
     for (i = 0; i < dataSet.length; i++) {
         let dataPoint = document.createElement('option');
@@ -217,14 +228,11 @@ let revealUpdate = function(bug_id) {
 };
 
 let submitUpdate = function(bug_id) {
-    console.log(bug_id);
     let description = document.getElementById(`description${bug_id}`).value;
     let urgency = document.getElementById(`urgency${bug_id}`).value;
     let employee = document.getElementById(`employee${bug_id}`).value;
 
     var body= {description, urgency, employee, bug_id};
-    console.log("body Stuff");
-    console.log(body);
 
     let req = new XMLHttpRequest();
 
@@ -236,9 +244,6 @@ let submitUpdate = function(bug_id) {
         if(req.status >=200 && req.status < 400){
             var response = JSON.parse(req.responseText)
             
-            // deleteTable()
-            // attachBugCard(response['rows'])
-            console.log(response)
         }
         else{
             console.log(req.statusText)
@@ -265,9 +270,6 @@ let resolveIssue = function(bug_id) {
         if(req.status >=200 && req.status < 400){
             var response = JSON.parse(req.responseText)
             
-            // deleteTable()
-            // attachBugCard(response['rows'])
-            console.log(response)
         }
         else{
             console.log(req.statusText)
@@ -292,9 +294,6 @@ let deleteRow = function(bug_id) {
         if(req.status >=200 && req.status < 400){
             var response = JSON.parse(req.responseText)
             
-            // deleteTable()
-            // attachBugCard(response['rows'])
-            console.log(response)
         }
         else{
             console.log(req.statusText)
@@ -337,10 +336,6 @@ document.getElementById('new_submit').addEventListener('click', function(event){
     req.addEventListener('load',function(){
         if(req.status >=200 && req.status < 400){
             var response = JSON.parse(req.responseText)
-            
-            // deleteTable()
-            // attachBugCard(response['rows'])
-            console.log(response)
         }
         else{
             console.log(req.statusText)

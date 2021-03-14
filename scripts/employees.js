@@ -277,7 +277,6 @@ document.addEventListener('DOMContentLoaded', function(event) {
             console.log(req.statusText);
         }
 
-        console.log(response)
         displayTable(response['rows'])
         event.preventDefault();
     })
@@ -317,8 +316,6 @@ let bindDeleteEmployeeButtons = function(dataSet){
 
         button = document.getElementById(`delete-employee${employee_id}`);
         button.addEventListener('click', function(employee_id){
-
-            //employee_id = document.getElementById(`new-member-input-for-team${team_id}`).value;
 
         var req = new XMLHttpRequest();
         req.open("DELETE", baseUrl, true);
@@ -381,7 +378,6 @@ let bind_update_button = function(update_button, employee_id, dataSet){
         });
     
         update_data = getUpdateData(employee_id);
-        console.log(update_data);
         req.send(JSON.stringify(update_data));
         
         disableUpdateFields(employee_id);
