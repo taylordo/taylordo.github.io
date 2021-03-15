@@ -305,7 +305,7 @@ let deleteRow = function(bug_id) {
     });
 }
 
-let baseUrl = "http://flip1.engr.oregonstate.edu:4756/bugs"
+let baseUrl = "https://cryptic-lowlands-25540.herokuapp.com/"
 
 //Initial Display Get request
 let getRequest = function(filter) {
