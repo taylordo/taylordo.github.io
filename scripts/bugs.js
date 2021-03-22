@@ -130,13 +130,11 @@ let generateName = function (dataSet, empData, empName, dataEmpNumber) {
     for (i = 0; i < empData.length; i++) {
 
         const empName = `${empData[i].first_name} ${empData[i].last_name}`
-        input.add(addRowEmployeeDropDown(empData[i].employee_id, empName));
+        employee_option = addRowEmployeeDropDown(empData[i].employee_id, empName);
+        input.add(employee_option)
 
         if(empData[i].employee_id === dataEmpNumber){
-            employee_option = addRowEmployeeDropDown(empData[i].employee_id, empName);
-            input.add(employee_option)
-            employee_option.selected = true;
-                
+            employee_option.selected = true;   
         }
     }
     
@@ -305,7 +303,7 @@ let deleteRow = function(bug_id) {
     });
 }
 
-let baseUrl = "https://cryptic-lowlands-25540.herokuapp.com/"
+let baseUrl = "http://flip1.engr.oregonstate.edu:4756/bugs"
 
 //Initial Display Get request
 let getRequest = function(filter) {
